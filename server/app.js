@@ -73,7 +73,21 @@ app.post("/links", (req, res, next) => {
 /************************************************************/
 
 app.post("/login", (req, res, next) => {
-  res.render("login");
+  // res.render("login");
+  const reqPass = req.body.password;
+  models.Users.getPassAndSalt(req.body.username).then(result => {
+    if (result) {
+      const resultPass = result.password;
+      const salt = result.salt;
+      if (models.Users.compare(reqPass, resultPass, salt)) {
+        res.redirect("/");
+      } else {
+        res.redirect("/login");
+      }
+    } else {
+      res.redirect("/login");
+    }
+  });
 });
 
 app.post("/signup", (req, res, next) => {
@@ -84,7 +98,7 @@ app.post("/signup", (req, res, next) => {
     username: req.body.username,
     password: req.body.password
   })
-    .then(results => {
+    .then(result => {
       res.redirect("/");
       // return res.status(201).send(JSON.stringify(req.body));
     })
