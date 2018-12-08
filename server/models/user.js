@@ -47,6 +47,10 @@ class Users extends Model {
   getPassAndSalt(username) {
     return super.get.call(this, {username: username});
   }
+
+  getUsername(userId) {
+    return super.get.call(this, {id: userId});
+  }
 }
 
 module.exports = new Users();
