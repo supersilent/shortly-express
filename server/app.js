@@ -16,7 +16,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.get("/", (req, res) => {
-  res.render("index");
+  Auth.createSession(req,res, () => {
+    res.render("index");
+  });
 });
 
 app.get("/create", (req, res) => {
